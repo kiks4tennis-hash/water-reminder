@@ -19,6 +19,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "kazusyou7163@yahoo.co.jp",
+        "ascAppId": "6797351627",
+        "appleTeamId": "T86Z7349M5"
+      }
+    }
   }
 }
