@@ -16,13 +16,6 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kazumax71.waterreminder",
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification",
-          "remote-notification"
-        ],
-        "ITSAppUsesNonExemptEncryption": false
-      }
     },
     "android": {
       "package": "com.kazumax71.waterreminder",
