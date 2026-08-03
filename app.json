@@ -17,7 +17,11 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.kazumax71.waterreminder",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification",
+          "remote-notification"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -26,7 +30,10 @@
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["SCHEDULE_EXACT_ALARM", "POST_NOTIFICATIONS"]
+      "permissions": [
+        "SCHEDULE_EXACT_ALARM",
+        "POST_NOTIFICATIONS"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -41,6 +48,9 @@
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "2d218380-9505-4afd-957f-3efa0991fadb"
       }
     }
   }
