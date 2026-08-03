@@ -16,6 +16,9 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kazumax71.waterreminder",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.kazumax71.waterreminder",
