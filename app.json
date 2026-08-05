@@ -23,7 +23,10 @@
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["SCHEDULE_EXACT_ALARM", "POST_NOTIFICATIONS"]
+      "permissions": [
+        "SCHEDULE_EXACT_ALARM",
+        "POST_NOTIFICATIONS"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -33,11 +36,22 @@
           "icon": "./assets/icons/notification-icon.png",
           "color": "#378ADD"
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "kitamoto-37",
+          "project": "water-reminder-sentry",
+          "url": "https://sentry.io/"
+        }
       ]
     ],
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "2d218380-9505-4afd-957f-3efa0991fadb"
       }
     }
   }
