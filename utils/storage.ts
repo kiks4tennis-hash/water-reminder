@@ -1,10 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/**
- * 汎用 AsyncStorage ラッパー。
- * ポモドーロアプリの storage.ts と同じインターフェースにしてあるので、
- * 次のアプリ（習慣トラッカー等）にもそのままコピーして使い回せる。
- */
 export async function getItem<T>(key: string, fallback: T): Promise<T> {
   try {
     const raw = await AsyncStorage.getItem(key);

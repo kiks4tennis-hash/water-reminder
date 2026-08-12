@@ -33,16 +33,13 @@ export default function SettingsScreen() {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [justSaved, setJustSaved] = useState(false);
 
-  // ストレージから読み込まれた値(または他画面での変更・タブ再訪問時)を仮入力欄に反映する。
-  // 保存せずに離れた変更はここで破棄される(意図的な挙動)。
   useEffect(() => {
     if (loaded) setDraft(toDraft(settings));
   }, [loaded, settings]);
 
   if (!loaded || !draft) return null;
 
-  const currentDraft = draft; // 以降、非nullとして扱う
-
+  const currentDraft = draft;
   const hasChanges = JSON.stringify(currentDraft) !== JSON.stringify(toDraft(settings));
 
   const applyRecommendation = () => {
@@ -122,7 +119,7 @@ export default function SettingsScreen() {
           </View>
 
           <Text style={styles.subLabel}>通知間隔</Text>
-          <View style={styles.chipRow}>
+          <View style={styles.row}>
             {INTERVAL_OPTIONS.map((min) => (
               <Pressable
                 key={min}
@@ -190,7 +187,6 @@ const styles = StyleSheet.create({
   subLabel: { fontSize: 12, color: '#888', marginTop: 12, marginBottom: 6 },
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, fontSize: 16 },
   row: { flexDirection: 'row', gap: 8 },
-  chipRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   rowBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   smallButton: { justifyContent: 'center', paddingHorizontal: 14, borderRadius: 8, backgroundColor: '#378ADD' },
   smallButtonDisabled: { backgroundColor: '#B9D6F2' },

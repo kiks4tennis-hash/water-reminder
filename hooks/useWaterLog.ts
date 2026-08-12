@@ -27,7 +27,6 @@ export function useWaterLog() {
     reload();
   }, [reload]);
 
-  // タブを切り替えて戻ってきた時に、他画面(設定画面のリセット等)での変更を反映する
   useFocusEffect(
     useCallback(() => {
       reload();

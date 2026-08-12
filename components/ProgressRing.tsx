@@ -5,7 +5,7 @@ import Svg, { Circle } from 'react-native-svg';
 type Props = {
   size?: number;
   strokeWidth?: number;
-  progress: number; // 0〜1(1以上は1に丸める)
+  progress: number;
   trackColor?: string;
   progressColor?: string;
   children?: React.ReactNode;
