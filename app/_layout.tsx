@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import * as Sentry from '@sentry/react-native';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { initNotificationHandler } from '../utils/notifications';
 
 // Sentry初期化自体が失敗してもアプリを道連れにしないようtry/catchで保護
 try {
@@ -34,6 +36,12 @@ if (globalAny.ErrorUtils && typeof globalAny.ErrorUtils.setGlobalHandler === 'fu
 }
 
 function RootLayout() {
+  useEffect(() => {
+    // アプリ起動直後(モジュール読み込み時)ではなく、
+    // 最初の描画が終わった後に安全に初期化する
+    initNotificationHandler();
+  }, []);
+
   return (
     <ErrorBoundary>
       <Stack screenOptions={{ headerShown: false }}>
