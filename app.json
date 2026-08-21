@@ -15,10 +15,7 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.kazumax71.waterreminder",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.kazumax71.waterreminder"
     },
     "android": {
       "package": "com.kazumax71.waterreminder",
@@ -26,35 +23,14 @@
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "SCHEDULE_EXACT_ALARM",
-        "POST_NOTIFICATIONS"
-      ]
+      "permissions": ["SCHEDULE_EXACT_ALARM", "POST_NOTIFICATIONS"]
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/icons/notification-icon.png",
-          "color": "#378ADD"
-        }
-      ],
-      [
-        "@sentry/react-native/expo",
-        {
-          "organization": "kitamoto-37",
-          "project": "react-native",
-          "url": "https://sentry.io/"
-        }
-      ]
+      "expo-router"
     ],
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "2d218380-9505-4afd-957f-3efa0991fadb"
       }
     }
   }
