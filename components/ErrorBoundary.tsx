@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import * as Sentry from '@sentry/react-native';
 
 type Props = { children: React.ReactNode };
 type State = { error: Error | null };
@@ -13,13 +12,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    // ここでJSエラーを確実に捕まえ、ネイティブ側に伝播させる前に処理する。
-    // これによりRCTExceptionsManager経由でのネイティブクラッシュを防ぐ狙い。
-    try {
-      Sentry.captureException(error, { extra: { componentStack: info.componentStack } });
-    } catch {
-      // Sentry自体が失敗してもここでは握りつぶす(二次クラッシュ防止)
-    }
+    // Sentryは検証のため一時的に無効化中。ここではログ出力のみ行う。
+    console.error('[ErrorBoundary]', error, info.componentStack);
   }
 
   reset = () => this.setState({ error: null });
