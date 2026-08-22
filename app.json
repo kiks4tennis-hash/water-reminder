@@ -15,10 +15,7 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.kazumax71.waterreminder",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.kazumax71.waterreminder"
     },
     "android": {
       "package": "com.kazumax71.waterreminder",
@@ -26,20 +23,22 @@
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "SCHEDULE_EXACT_ALARM",
-        "POST_NOTIFICATIONS"
-      ]
+      "permissions": ["SCHEDULE_EXACT_ALARM", "POST_NOTIFICATIONS"]
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icons/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
     ],
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "2d218380-9505-4afd-957f-3efa0991fadb"
       }
     }
   }
