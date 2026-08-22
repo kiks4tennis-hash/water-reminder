@@ -1,22 +1,12 @@
-import { useEffect } from 'react';
 import { Stack } from 'expo-router';
-import { ErrorBoundary } from '../components/ErrorBoundary';
-import { initNotificationHandler } from '../utils/notifications';
 
-// --- Sentryランタイム部分は原因切り分けのため一時的に無効化 ---
-// import * as Sentry from '@sentry/react-native';
-// -----------------------------------------------------------
+// --- 診断用の最小構成レイアウト ---
+// ErrorBoundary, 通知初期化など、独自コードは一切呼び出さない
 
 export default function RootLayout() {
-  useEffect(() => {
-    initNotificationHandler();
-  }, []);
-
   return (
-    <ErrorBoundary>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-      </Stack>
-    </ErrorBoundary>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+    </Stack>
   );
 }
