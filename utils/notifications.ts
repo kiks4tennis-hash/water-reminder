@@ -1,18 +1,43 @@
+import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { UserSettings } from '../types';
 
-// --- 診断用ビルド: expo-notifications を一時的に完全に無効化 ---
-// クラッシュの原因切り分けのため、実際のネイティブ呼び出しは一切行わず、
-// すべて no-op(何もしない)関数にしている。
-// 元に戻す際は、このファイルを notifications.ts の正式版に差し戻すこと。
+let handlerInitialized = false;
 
+/**
+ * 通知ハンドラの登録。
+ * モジュール読み込み時ではなく、アプリの初期描画が終わった後に
+ * 呼び出し側(app/_layout.tsx)から明示的に呼ぶ。try/catchで保護。
+ */
 export function initNotificationHandler(): void {
-  console.log('[notifications] (disabled for diagnosis) initNotificationHandler skipped');
+  if (handlerInitialized) return;
+  try {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+        shouldShowBanner: true,
+        shouldShowList: true,
+      }),
+    });
+    handlerInitialized = true;
+  } catch (e) {
+    console.warn('[notifications] setNotificationHandler failed', e);
+  }
 }
 
 export async function requestNotificationPermission(): Promise<boolean> {
-  console.log('[notifications] (disabled for diagnosis) requestNotificationPermission skipped');
-  return false;
+  try {
+    const { status: existing } = await Notifications.getPermissionsAsync();
+    if (existing === 'granted') return true;
+
+    const { status } = await Notifications.requestPermissionsAsync();
+    return status === 'granted';
+  } catch (e) {
+    console.warn('[notifications] requestNotificationPermission failed', e);
+    return false;
+  }
 }
 
 function parseHHmm(value: string): { hour: number; minute: number } {
@@ -40,12 +65,65 @@ export function buildReminderTimes(
   return times;
 }
 
-export async function rescheduleReminders(_settings: UserSettings): Promise<void> {
-  console.log('[notifications] (disabled for diagnosis) rescheduleReminders skipped');
+const NOTIFICATION_CATEGORY = 'water-reminder-daily';
+const MAX_SAFE_SCHEDULED_NOTIFICATIONS = 60;
+
+export async function rescheduleReminders(settings: UserSettings): Promise<void> {
+  try {
+    initNotificationHandler();
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    if (!settings.remindersEnabled) return;
+
+    const granted = await requestNotificationPermission();
+    if (!granted) return;
+
+    const times = buildReminderTimes(
+      settings.reminderIntervalMinutes,
+      settings.quietHoursStart,
+      settings.quietHoursEnd
+    );
+
+    if (times.length > MAX_SAFE_SCHEDULED_NOTIFICATIONS || times.length === 0) {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '水分補給の時間です',
+          body: 'コップ1杯、水を飲みましょう',
+          data: { category: NOTIFICATION_CATEGORY },
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: Math.max(60, settings.reminderIntervalMinutes * 60),
+          repeats: true,
+        },
+      });
+      return;
+    }
+
+    for (const { hour, minute } of times) {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '水分補給の時間です',
+          body: 'コップ1杯、水を飲みましょう',
+          data: { category: NOTIFICATION_CATEGORY },
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DAILY,
+          hour,
+          minute,
+        },
+      });
+    }
+  } catch (e) {
+    console.warn('[notifications] rescheduleReminders failed', e);
+  }
 }
 
 export async function cancelAllReminders(): Promise<void> {
-  console.log('[notifications] (disabled for diagnosis) cancelAllReminders skipped');
+  try {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  } catch (e) {
+    console.warn('[notifications] cancelAllReminders failed', e);
+  }
 }
 
 export const isAndroid = Platform.OS === 'android';

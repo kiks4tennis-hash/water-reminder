@@ -4,13 +4,12 @@ import { View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { ErrorBoundary } from '../components/ErrorBoundary';
+import { initNotificationHandler } from '../utils/notifications';
 
-// アプリの起動が終わるまでスプラッシュ画面を維持する
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
-  // タブのアイコン(Ionicons)のフォントを、画面を表示する前に確実に読み込む。
-  // これを待たずにアイコンを描画しようとすると、本番ビルドでクラッシュすることが分かったため。
   const [fontsLoaded, fontError] = useFonts({
     ...Ionicons.font,
   });
@@ -22,6 +21,13 @@ export default function RootLayout() {
       setAppReady(true);
     }
   }, [fontsLoaded, fontError]);
+
+  useEffect(() => {
+    if (appReady) {
+      // フォント読み込み・初期描画が終わった後、安全に通知ハンドラを初期化する
+      initNotificationHandler();
+    }
+  }, [appReady]);
 
   const onLayoutRootView = useCallback(async () => {
     if (appReady) {
@@ -35,9 +41,11 @@ export default function RootLayout() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-      </Stack>
+      <ErrorBoundary>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </ErrorBoundary>
     </View>
   );
 }
